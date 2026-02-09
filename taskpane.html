@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+ <meta charset="utf-8" />
+ <title>Catering-Assistent</title>
+ <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+ <style>
+ body { font-family: Segoe UI, sans-serif; padding: 20px; }
+ label { font-weight: 600; }
+ input, textarea, select { width: 100%; margin-top: 6px; margin-bottom: 14px; }
+ button { background: #0078d4; color: white; padding: 10px; border: none; width: 100%; }
+ button:hover { background: #005a9e; }
+ </style>
+</head>
+<body>
+ <h2>Catering-Assistent</h2>
+ <p>Bitte Catering-Wunsch eingeben:</p>
+ <label>Catering erforderlich?</label>
+ <select id="cateringRequired"><option value="Nein">Nein</option><option value="Ja">Ja</option></select>
+ <label>Anzahl Personen</label>
+ <input type="number" id="persons" min="1" max="200"/>
+ <label>Bemerkung</label>
+ <textarea id="note"></textarea>
+ <button id="saveBtn">Speichern</button>
+ <script src="taskpane.js"></script>
+</body>
+</html>
