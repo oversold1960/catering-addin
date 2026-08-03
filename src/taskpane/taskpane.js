@@ -14,7 +14,7 @@
  */
 
 // TODO: Durch die echte URL des Power-Automate-Flows / der Azure Function ersetzen.
-const CATERING_ENDPOINT = "https://PLATZHALTER-FLOW-ODER-FUNCTION-URL/catering-request";
+const CATERING_ENDPOINT = "https://default536d21304a39421d8c59bc1dcba1f1.29.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/c818a16fd72145168ccb3cbe086c6815/triggers/manual/paths/invoke?api-version=1";
 
 let itemContext = {
   subject: "",
