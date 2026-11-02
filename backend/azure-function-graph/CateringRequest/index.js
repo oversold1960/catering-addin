@@ -91,6 +91,8 @@ async function sendCateringMail(token, payload) {
       <tr><td><b>Art</b></td><td>${escapeHtml(catering.type)}</td></tr>
       <tr><td><b>Lieferzeit</b></td><td>${escapeHtml(catering.deliveryTime)}</td></tr>
       <tr><td><b>Kostenstelle</b></td><td>${escapeHtml(catering.costCenter)}</td></tr>
+      <tr><td><b>Zu bewirtende Firma</b></td><td>${escapeHtml(catering.guestCompany || "–")}</td></tr>
+      <tr><td><b>Zu bewirtende Personen</b></td><td>${escapeHtml(catering.guestNames || "–").replace(/\n/g, "<br>")}</td></tr>
       <tr><td><b>Besonderheiten</b></td><td>${escapeHtml(catering.dietaryNotes || "–")}</td></tr>
       <tr><td><b>Angefragt von</b></td><td>${escapeHtml(requestedBy.name)} (${escapeHtml(requestedBy.email)}, ${escapeHtml(requestedBy.phone || "–")})</td></tr>
     </table>
