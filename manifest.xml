@@ -23,7 +23,7 @@
     xsi:type="MailApp">
 
   <Id>83994dae-7382-4c11-b16d-1a205f736ac5</Id>
-  <Version>1.0.0.5</Version>
+  <Version>1.0.0.6</Version>
   <ProviderName>Brüning Group Germany GmbH</ProviderName>
   <DefaultLocale>de-DE</DefaultLocale>
   <DisplayName DefaultValue="Catering bestellen" />
