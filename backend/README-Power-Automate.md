@@ -33,7 +33,9 @@ selbst versendet nie eine E-Mail, es ruft nur diesen Flow per HTTP auf.
         "type": { "type": "string" },
         "deliveryTime": { "type": "string" },
         "dietaryNotes": { "type": ["string", "null"] },
-        "costCenter": { "type": "string" }
+        "costCenter": { "type": "string" },
+        "guestCompany": { "type": ["string", "null"] },
+        "guestNames": { "type": ["string", "null"] }
       }
     },
     "requestedBy": {
@@ -69,6 +71,8 @@ selbst versendet nie eine E-Mail, es ruft nur diesen Flow per HTTP auf.
   <tr><td><b>Art</b></td><td>@{triggerBody()?['catering']?['type']}</td></tr>
   <tr><td><b>Lieferzeit</b></td><td>@{triggerBody()?['catering']?['deliveryTime']}</td></tr>
   <tr><td><b>Kostenstelle</b></td><td>@{triggerBody()?['catering']?['costCenter']}</td></tr>
+  <tr><td><b>Zu bewirtende Firma</b></td><td>@{coalesce(triggerBody()?['catering']?['guestCompany'], '–')}</td></tr>
+  <tr><td><b>Zu bewirtende Personen</b></td><td>@{replace(coalesce(triggerBody()?['catering']?['guestNames'], '–'), decodeUriComponent('%0A'), '<br>')}</td></tr>
   <tr><td><b>Besonderheiten</b></td><td>@{triggerBody()?['catering']?['dietaryNotes']}</td></tr>
   <tr><td><b>Angefragt von</b></td><td>@{triggerBody()?['requestedBy']?['name']} (@{triggerBody()?['requestedBy']?['email']}, @{triggerBody()?['requestedBy']?['phone']})</td></tr>
 </table>
@@ -90,6 +94,9 @@ selbst versendet nie eine E-Mail, es ruft nur diesen Flow per HTTP auf.
 - Optional zusätzlich absichern: Azure API Management oder eine Function
   davor schalten, die z. B. das Absender-Mailbox-Postfach gegen eine erlaubte
   Domain prüft.
+- HTML-Einschleusung: Freitextfelder (Personen, Firma, Wünsche) werden vom
+  Flow unverändert ins HTML übernommen. Für den Empfang ungefährlich, aber
+  unschön; bei Bedarf mit `replace(..., '<', '&lt;')` entschärfen.
 - Empfehlenswert: Im Flow eine einfache Plausibilitätsprüfung einbauen
   (z. B. `attendeeCount` > 0, `costCenter` nicht leer) und bei Fehlern mit
   HTTP 400 antworten, damit die Task Pane eine sinnvolle Fehlermeldung zeigt.
