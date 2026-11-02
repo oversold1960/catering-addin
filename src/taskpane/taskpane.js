@@ -93,6 +93,8 @@ async function handleSubmit() {
   const cateringType = document.getElementById("cateringType").value;
   const deliveryTime = document.getElementById("deliveryTime").value;
   const costCenter = document.getElementById("costCenter").value.trim();
+  const guestCompany = document.getElementById("guestCompany").value.trim().slice(0, 200);
+  const guestNames = document.getElementById("guestNames").value.trim().slice(0, 1000);
   const dietaryNotes = document.getElementById("dietaryNotes").value.trim();
   const phone = document.getElementById("phone").value.trim();
 
@@ -119,7 +121,9 @@ async function handleSubmit() {
       type: cateringType,
       deliveryTime: deliveryTime,
       dietaryNotes: dietaryNotes || null,
-      costCenter: costCenter
+      costCenter: costCenter,
+      guestCompany: guestCompany || null,
+      guestNames: guestNames || null
     },
     requestedBy: {
       name: profile.displayName,
