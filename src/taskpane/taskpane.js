@@ -80,6 +80,13 @@ function formatRange(start, end) {
   return `${dateFmt.format(s)}, ${timeFmt.format(s)}–${timeFmt.format(e)} Uhr`;
 }
 
+// Fehlermarkierung entfernen, sobald eine Option gewählt wird.
+document.getElementById("cateringTypeGroup").addEventListener("change", (e) => {
+  if (e.target.matches('input[name="cateringType"]:checked')) {
+    e.currentTarget.classList.remove("invalid");
+  }
+});
+
 document.getElementById("cateringForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   await handleSubmit();
@@ -90,7 +97,12 @@ async function handleSubmit() {
   const submitBtn = document.getElementById("submitBtn");
 
   const attendeeCount = document.getElementById("attendeeCount").value;
-  const cateringType = document.getElementById("cateringType").value;
+  // Mehrfachauswahl: alle angehakten Optionen in Formularreihenfolge.
+  const cateringTypes = Array.from(
+    document.querySelectorAll('input[name="cateringType"]:checked')
+  ).map((cb) => cb.value);
+  // Trenner "; ", weil eine Option selbst Kommas enthält ("Laugenstangen, Butter, Dip").
+  const cateringType = cateringTypes.join("; ");
   const deliveryTime = document.getElementById("deliveryTime").value;
   const costCenter = document.getElementById("costCenter").value.trim();
   const guestCompany = document.getElementById("guestCompany").value.trim().slice(0, 200);
@@ -98,8 +110,11 @@ async function handleSubmit() {
   const dietaryNotes = document.getElementById("dietaryNotes").value.trim();
   const phone = document.getElementById("phone").value.trim();
 
-  if (!attendeeCount || !cateringType || !deliveryTime || !costCenter) {
-    setStatus(statusEl, "Bitte alle Pflichtfelder (*) ausfüllen.", "error");
+  const typeGroup = document.getElementById("cateringTypeGroup");
+  typeGroup.classList.toggle("invalid", cateringTypes.length === 0);
+
+  if (!attendeeCount || cateringTypes.length === 0 || !deliveryTime || !costCenter) {
+    setStatus(statusEl, "Bitte alle Pflichtfelder (*) ausfüllen – bei „Art des Caterings“ mindestens eine Option wählen.", "error");
     return;
   }
 
@@ -118,7 +133,8 @@ async function handleSubmit() {
     },
     catering: {
       attendeeCount: parseInt(attendeeCount, 10),
-      type: cateringType,
+      type: cateringType,          // kompatibel: Text, z. B. "Kekse; Obst"
+      types: cateringTypes,        // neu ab 1.0.0.9: Liste der gewählten Optionen
       deliveryTime: deliveryTime,
       dietaryNotes: dietaryNotes || null,
       costCenter: costCenter,
@@ -135,6 +151,17 @@ async function handleSubmit() {
 
   submitBtn.disabled = true;
   setStatus(statusEl, "Anfrage wird gesendet…", "");
+
+  // Bewirtungsbeleg (PDF) für den Empfang erzeugen und mitsenden (siehe beleg.js).
+  // Schlägt das fehl, wird die Anfrage trotzdem ohne Anhang gesendet.
+  payload.bewirtungsbeleg = null;
+  payload.bewirtungsbelegError = null;
+  try {
+    payload.bewirtungsbeleg = await buildBelegAttachment(payload.requestId);
+  } catch (belegErr) {
+    console.error(belegErr);
+    payload.bewirtungsbelegError = "PDF konnte im Add-in nicht erzeugt werden";
+  }
 
   try {
     const response = await fetch(CATERING_ENDPOINT, {

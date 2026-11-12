@@ -29,17 +29,19 @@
       <input type="number" id="attendeeCount" min="1" step="1" required />
     </label>
 
-    <label class="field">
-      <span>Art des Caterings <em>*</em></span>
-      <select id="cateringType" required>
-        <option value="" disabled selected>Bitte wählen…</option>
-        <option value="Kaffee & Gebäck">Kaffee &amp; Gebäck</option>
-        <option value="Mittagsbuffet">Mittagsbuffet</option>
-        <option value="Fingerfood">Fingerfood</option>
-        <option value="Nur Getränke">Nur Getränke</option>
-        <option value="Sonstiges">Sonstiges</option>
-      </select>
-    </label>
+    <fieldset class="field chips-field" id="cateringTypeGroup" aria-describedby="cateringTypeHint">
+      <legend>Art des Caterings <em>*</em></legend>
+      <div class="chips">
+        <label class="chip"><input type="checkbox" name="cateringType" value="Kekse" /><span>Kekse</span></label>
+        <label class="chip"><input type="checkbox" name="cateringType" value="Kuchen" /><span>Kuchen</span></label>
+        <label class="chip"><input type="checkbox" name="cateringType" value="Obst" /><span>Obst</span></label>
+        <label class="chip"><input type="checkbox" name="cateringType" value="Belegte Brötchen" /><span>Belegte Brötchen</span></label>
+        <label class="chip"><input type="checkbox" name="cateringType" value="Laugenstangen, Butter, Dip" /><span>Laugenstangen, Butter, Dip</span></label>
+        <label class="chip"><input type="checkbox" name="cateringType" value="Käsebrett" /><span>Käsebrett</span></label>
+        <label class="chip"><input type="checkbox" name="cateringType" value="Sonstiges" /><span>Sonstiges</span></label>
+      </div>
+      <small class="hint" id="cateringTypeHint">Mehrfachauswahl möglich.</small>
+    </fieldset>
 
     <label class="field">
       <span>Gewünschte Lieferzeit <em>*</em></span>
@@ -48,7 +50,7 @@
 
     <label class="field">
       <span>Kostenstelle <em>*</em></span>
-      <input type="text" id="costCenter" placeholder="z. B. BGG o. BH o. Unit" required />
+      <input type="text" id="costCenter" placeholder="zB. BGG, Holding" required />
     </label>
 
     <label class="field">
@@ -63,7 +65,7 @@
     </label>
 
     <label class="field">
-      <span>Besondere Wünsche</span>
+      <span>Sonstige Wünsche</span>
       <textarea id="dietaryNotes" rows="3" placeholder="z. B. Vegetarisch"></textarea>
     </label>
 
@@ -76,6 +78,8 @@
     <p id="statusMsg" class="status" role="status" aria-live="polite"></p>
   </form>
 
+  <script src="../lib/pdf-lib.min.js"></script>
   <script src="taskpane.js"></script>
+  <script src="beleg.js"></script>
 </body>
 </html>
