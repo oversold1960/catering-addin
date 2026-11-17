@@ -113,8 +113,15 @@ async function handleSubmit() {
   const typeGroup = document.getElementById("cateringTypeGroup");
   typeGroup.classList.toggle("invalid", cateringTypes.length === 0);
 
-  if (!attendeeCount || cateringTypes.length === 0 || !deliveryTime || !costCenter) {
-    setStatus(statusEl, "Bitte alle Pflichtfelder (*) ausfüllen – bei „Art des Caterings“ mindestens eine Option wählen.", "error");
+  const missing = [];
+  if (!attendeeCount) missing.push("Anzahl Personen");
+  if (cateringTypes.length === 0) missing.push("Art des Caterings (mind. eine Option)");
+  if (!deliveryTime) missing.push("Gewünschte Lieferzeit");
+  if (!costCenter) missing.push("Kostenstelle");
+  if (!guestCompany) missing.push("Zu bewirtende Firma");
+  if (!guestNames) missing.push("Zu bewirtende Personen");
+  if (missing.length > 0) {
+    setStatus(statusEl, "Bitte Pflichtfelder ausfüllen: " + missing.join(", ") + ".", "error");
     return;
   }
 
